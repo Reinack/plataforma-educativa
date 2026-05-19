@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="mb-1"><i class="bi bi-chat-square-text"></i> Comunidad</h2>
+    <p class="text-muted mb-0">Discutí con compañeros de tus cursos.</p>
+  </div>
+  <a href="/comunidad/nuevo<%= curso_id ? '?curso_id=' + curso_id : '' %>" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nuevo post</a>
+</div>
+
+<!-- Chips de comunidad por curso -->
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <a href="/comunidad" class="tipo-chip <%= !curso_id ? 'active' : '' %>">
+    <i class="bi bi-grid"></i> Todas
+  </a>
+  <a href="/comunidad?curso_id=general" class="tipo-chip <%= curso_id === 'general' ? 'active' : '' %>">
+    <i class="bi bi-globe"></i> General
+  </a>
+  <% cursos.forEach(c => { %>
+    <a href="/comunidad?curso_id=<%= c.id %>" class="tipo-chip <%= String(curso_id) === String(c.id) ? 'active' : '' %>">
+      <i class="bi bi-collection-play"></i> <%= c.titulo %>
+    </a>
+  <% }) %>
+</div>
+
+<% if (posts.length === 0) { %>
+  <div class="empty-state">
+    <i class="bi bi-chat-square"></i>
+    <p>
+      <% if (curso_id) { %>
+        Todavía no hay posts en esta comunidad. <a href="/comunidad/nuevo?curso_id=<%= curso_id %>">Sé el primero en publicar.</a>
+      <% } else if (cursos.length === 0 && currentUser.rol === 'alumno') { %>
+        Cuando te asignen un curso vas a ver acá la comunidad correspondiente.
+      <% } else { %>
+        Sé el primero en publicar.
+      <% } %>
+    </p>
+  </div>
+<% } %>
+<% posts.forEach(p => { %>
+  <div class="card post-card mb-2 <%= p.fijado ? 'fijado' : '' %>">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <div>
+          <% if (p.fijado) { %><span class="badge bg-warning text-dark me-1"><i class="bi bi-pin-angle"></i> Fijado</span><% } %>
+          <% if (p.curso_titulo) { %>
+            <span class="badge bg-secondary me-1"><i class="bi bi-collection-play"></i> <%= p.curso_titulo %></span>
+          <% } else { %>
+            <span class="badge bg-info text-dark me-1"><i class="bi bi-globe"></i> General</span>
+          <% } %>
+          <a href="/comunidad/<%= p.id %>" class="text-decoration-none text-reset"><h5 class="d-inline mb-0"><%= p.titulo %></h5></a>
+          <div class="small text-muted mt-1"><i class="bi bi-person-circle"></i> <%= p.autor %> · <%= helpers.formatDate(p.fecha) %></div>
+        </div>
+      </div>
+      <p class="mt-2 mb-2 text-muted"><%= p.contenido.substring(0, 200) %><%= p.contenido.length > 200 ? '...' : '' %></p>
+      <div class="d-flex gap-3 align-items-center small">
+        <form action="/comunidad/<%= p.id %>/like" method="POST" class="d-inline">
+          <button class="btn btn-sm btn-link p-0 text-decoration-none <%= p.me_gusta ? 'text-danger' : 'text-muted' %>">
+            <i class="bi <%= p.me_gusta ? 'bi-heart-fill' : 'bi-heart' %>"></i> <%= p.num_likes %>
+          </button>
+        </form>
+        <a href="/comunidad/<%= p.id %>" class="text-decoration-none text-muted"><i class="bi bi-chat"></i> <%= p.num_comentarios %></a>
+        <% if (p.usuario_id === currentUser.id || currentUser.rol === 'admin') { %>
+          <form action="/comunidad/<%= p.id %>/eliminar" method="POST" class="ms-auto" onsubmit="return confirm('¿Borrar post?')">
+            <button class="btn btn-sm btn-link text-danger p-0"><i class="bi bi-trash"></i></button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+<% }) %>

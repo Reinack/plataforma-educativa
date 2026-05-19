@@ -1,0 +1,9 @@
+<div class="text-center py-5">
+  <i class="bi bi-bug" style="font-size:5rem;color:#ef4444;"></i>
+  <h1 class="mt-3">500</h1>
+  <p class="lead text-muted">Hubo un error en el servidor.</p>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <pre class="text-start bg-light p-3 small"><%= error.stack || error.message %></pre>
+  <% } %>
+  <a href="/" class="btn btn-primary">Volver al inicio</a>
+</div>

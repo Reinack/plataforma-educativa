@@ -1,0 +1,25 @@
+{
+  "name": "plataforma-educativa",
+  "version": "1.0.0",
+  "description": "Plataforma educativa con cursos, clases en vivo, comunidad y panel admin",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^9.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.0",
+    "multer": "^2.0.0",
+    "pg": "^8.21.0"
+  }
+}

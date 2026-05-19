@@ -1,0 +1,45 @@
+<div class="mb-4">
+  <h2 class="mb-1">Panel del administrador</h2>
+  <p class="text-muted mb-0">Vista general de tu plataforma educativa.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-indigo d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.usuarios %></div><div class="label">Alumnos</div></div><div class="stat-icon"><i class="bi bi-people"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-pink d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.cursosPub %><span class="text-muted" style="font-size:1.1rem">/<%= stats.cursos %></span></div><div class="label">Cursos publicados</div></div><div class="stat-icon"><i class="bi bi-collection-play"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-cyan d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.clases %></div><div class="label">Clases próximas</div></div><div class="stat-icon"><i class="bi bi-camera-video"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-green d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.materiales %></div><div class="label">Material</div></div><div class="stat-icon"><i class="bi bi-folder"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-amber d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.inscripciones %></div><div class="label">Asignaciones</div></div><div class="stat-icon"><i class="bi bi-card-checklist"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-indigo d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.certificados %></div><div class="label">Certificados</div></div><div class="stat-icon"><i class="bi bi-award"></i></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="stat-card grad-pink d-flex justify-content-between align-items-center"><div><div class="num"><%= stats.posts %></div><div class="label">Posts comunidad</div></div><div class="stat-icon"><i class="bi bi-chat-square-text"></i></div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header bg-white"><strong>Últimos alumnos</strong></div>
+      <ul class="list-group list-group-flush">
+        <% if (ultimosUsuarios.length === 0) { %><li class="list-group-item text-muted small">Sin datos</li><% } %>
+        <% ultimosUsuarios.forEach(u => { %>
+          <li class="list-group-item d-flex justify-content-between">
+            <a href="/admin/usuarios/<%= u.id %>" class="text-decoration-none text-reset"><%= u.nombre %> <small class="text-muted">@<%= u.username %></small></a>
+            <small class="text-muted"><%= helpers.formatDateShort(u.fecha_creacion) %></small>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header bg-white"><strong>Cursos más populares</strong></div>
+      <ul class="list-group list-group-flush">
+        <% if (topCursos.length === 0) { %><li class="list-group-item text-muted small">Sin datos</li><% } %>
+        <% topCursos.forEach(c => { %>
+          <li class="list-group-item d-flex justify-content-between">
+            <a href="/admin/cursos/<%= c.id %>" class="text-decoration-none text-reset"><%= c.titulo %></a>
+            <span class="badge bg-primary"><%= c.inscriptos %> inscriptos</span>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</div>

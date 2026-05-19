@@ -1,0 +1,36 @@
+<h2><i class="bi bi-camera-video"></i> <%= clase ? 'Editar' : 'Nueva' %> clase en vivo</h2>
+<form action="/admin/clases/<%= clase ? clase.id : 'nueva' %>" method="POST" class="card card-body">
+  <div class="mb-3"><label class="form-label">Título</label><input name="titulo" class="form-control" value="<%= clase ? clase.titulo : '' %>" required></div>
+  <div class="mb-3"><label class="form-label">Descripción</label><textarea name="descripcion" rows="3" class="form-control"><%= clase ? (clase.descripcion || '') : '' %></textarea></div>
+  <div class="row">
+    <div class="col-md-5 mb-3"><label class="form-label">Fecha y hora</label><input type="datetime-local" name="fecha_hora" class="form-control" value="<%= clase ? clase.fecha_hora.slice(0,16) : '' %>" required></div>
+    <div class="col-md-3 mb-3"><label class="form-label">Duración (min)</label><input type="number" name="duracion_min" class="form-control" value="<%= clase ? clase.duracion_min : 60 %>" min="5"></div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Instructor (Profesor)</label>
+      <select name="instructor_id" class="form-select" required>
+        <option value="">— Seleccionar profesor —</option>
+        <% profesores.forEach(p => { %>
+          <option value="<%= p.id %>" <%= clase && clase.instructor_id == p.id ? 'selected' : '' %>><%= p.nombre %></option>
+        <% }) %>
+      </select>
+      <% if (!profesores.length) { %>
+        <small class="text-danger">No hay usuarios con rol Profesor. Creá uno en Usuarios.</small>
+      <% } %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mb-3"><label class="form-label">Link (Zoom, Meet, etc.)</label><input name="link" class="form-control" value="<%= clase ? (clase.link || '') : '' %>" placeholder="https://..."></div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Curso (opcional)</label>
+      <select name="curso_id" class="form-select">
+        <option value="">— libre —</option>
+        <% cursos.forEach(c => { %><option value="<%= c.id %>" <%= clase && clase.curso_id == c.id ? 'selected' : '' %>><%= c.titulo %></option><% }) %>
+      </select>
+    </div>
+  </div>
+  <div class="form-check mb-3">
+    <input type="checkbox" name="publicado" class="form-check-input" id="pub" <%= !clase || clase.publicado ? 'checked' : '' %>>
+    <label for="pub" class="form-check-label">Publicada (visible a alumnos)</label>
+  </div>
+  <div><a href="/admin/clases" class="btn btn-light">Volver</a> <button class="btn btn-primary">Guardar</button></div>
+</form>

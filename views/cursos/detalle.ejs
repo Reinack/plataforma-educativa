@@ -1,0 +1,65 @@
+<nav aria-label="breadcrumb" class="small">
+  <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/cursos">Cursos</a></li><li class="breadcrumb-item active"><%= curso.titulo %></li></ol>
+</nav>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <small class="text-muted"><%= curso.categoria || 'Sin categoría' %></small>
+        <h2 class="mb-2"><%= curso.titulo %></h2>
+        <p class="text-muted"><%= curso.descripcion %></p>
+        <p class="small"><i class="bi bi-person-circle"></i> <strong>Instructor:</strong> <%= curso.instructor || '—' %></p>
+
+        <% if (currentUser.rol === 'alumno') { %>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small"><span>Tu progreso</span><strong><%= progreso %>%</strong></div>
+            <div class="progress"><div class="progress-bar" style="width: <%= progreso %>%"><%= completadas %>/<%= totalVideos %></div></div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <h4 class="mt-4 mb-3">Contenido del curso</h4>
+    <% if (modulos.length === 0) { %>
+      <div class="empty-state"><i class="bi bi-folder"></i><p>Aún no hay contenido.</p></div>
+    <% } %>
+    <div class="accordion" id="modAcc">
+      <% modulos.forEach((m, idx) => { %>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button <%= idx > 0 ? 'collapsed' : '' %>" data-bs-toggle="collapse" data-bs-target="#mod<%= m.id %>">
+              <strong><%= m.titulo %></strong> <span class="text-muted ms-2 small">(<%= m.videos.length %> videos)</span>
+            </button>
+          </h2>
+          <div id="mod<%= m.id %>" class="accordion-collapse collapse <%= idx === 0 ? 'show' : '' %>" data-bs-parent="#modAcc">
+            <div class="list-group list-group-flush">
+              <% m.videos.forEach(v => { %>
+                <a href="/cursos/<%= curso.id %>/videos/<%= v.id %>" class="list-group-item list-group-item-action d-flex justify-content-between">
+                  <span><i class="bi <%= v.completado ? 'bi-check-circle-fill text-success' : 'bi-play-circle' %>"></i> <%= v.titulo %></span>
+                  <small class="text-muted"><%= v.duracion_min ? v.duracion_min + ' min' : '' %></small>
+                </a>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <% if (materiales.length > 0) { %>
+      <div class="card">
+        <div class="card-header bg-white"><h6 class="mb-0"><i class="bi bi-folder"></i> Material del curso</h6></div>
+        <div class="list-group list-group-flush">
+          <% materiales.forEach(m => { %>
+            <a href="/material/<%= m.id %>/descargar" class="list-group-item list-group-item-action d-flex justify-content-between">
+              <span><i class="bi bi-file-earmark-arrow-down"></i> <%= m.titulo %></span>
+              <small class="text-muted"><%= helpers.formatBytes(m.tamano_bytes) %></small>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

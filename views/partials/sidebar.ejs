@@ -1,0 +1,33 @@
+<nav class="col-lg-2 d-lg-block bg-light sidebar collapse">
+  <div class="position-sticky pt-3">
+    <% if (currentUser && currentUser.rol === 'admin' && path.startsWith('/admin')) { %>
+      <h6 class="sidebar-heading px-3 mt-1 mb-2 text-uppercase text-muted small">Administración</h6>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link <%= path === '/admin' ? 'active' : '' %>" href="/admin"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/usuarios') ? 'active' : '' %>" href="/admin/usuarios"><i class="bi bi-people"></i> Usuarios</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/cursos') ? 'active' : '' %>" href="/admin/cursos"><i class="bi bi-collection-play"></i> Cursos</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/categorias') ? 'active' : '' %>" href="/admin/categorias"><i class="bi bi-tags"></i> Categorías</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/clases') ? 'active' : '' %>" href="/admin/clases"><i class="bi bi-camera-video"></i> Clases en vivo</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/material') ? 'active' : '' %>" href="/admin/material"><i class="bi bi-folder"></i> Material Descargable</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/comunidad') ? 'active' : '' %>" href="/admin/comunidad"><i class="bi bi-chat-square-text"></i> Comunidad</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/admin/estadisticas') ? 'active' : '' %>" href="/admin/estadisticas"><i class="bi bi-bar-chart"></i> Estadísticas</a></li>
+        <hr>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/manual') ? 'active' : '' %>" href="/manual"><i class="bi bi-book"></i> Manual de uso</a></li>
+      </ul>
+    <% } else if (currentUser) { %>
+      <h6 class="sidebar-heading px-3 mt-1 mb-2 text-uppercase text-muted small">Menú</h6>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link <%= path === '/dashboard' ? 'active' : '' %>" href="/dashboard"><i class="bi bi-house"></i> Inicio</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/cursos') ? 'active' : '' %>" href="/cursos"><i class="bi bi-collection-play"></i> Cursos</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/clases') ? 'active' : '' %>" href="/clases"><i class="bi bi-camera-video"></i> Clases en vivo</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/material') ? 'active' : '' %>" href="/material"><i class="bi bi-folder"></i> Material Descargable</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/comunidad') ? 'active' : '' %>" href="/comunidad"><i class="bi bi-chat-square-text"></i> Comunidad</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/mensajes') ? 'active' : '' %>" href="/mensajes"><i class="bi bi-envelope"></i> Mensajes <% if (mensajesCount > 0) { %><span class="badge bg-danger ms-1"><%= mensajesCount %></span><% } %></a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/notificaciones') ? 'active' : '' %>" href="/notificaciones"><i class="bi bi-bell"></i> Notificaciones <% if (notifCount > 0) { %><span class="badge bg-danger ms-1"><%= notifCount %></span><% } %></a></li>
+        <hr>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/manual') ? 'active' : '' %>" href="/manual"><i class="bi bi-book"></i> Manual de uso</a></li>
+        <li class="nav-item"><a class="nav-link <%= path.startsWith('/perfil') ? 'active' : '' %>" href="/perfil"><i class="bi bi-person-circle"></i> Mi perfil</a></li>
+      </ul>
+    <% } %>
+  </div>
+</nav>

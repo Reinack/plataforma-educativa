@@ -1,0 +1,62 @@
+<h3><i class="bi bi-envelope"></i> Mensajes</h3>
+<div class="row mt-3">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Conversaciones</strong>
+        <a href="/mensajes/nuevo" class="btn btn-sm btn-primary"><i class="bi bi-plus"></i></a>
+      </div>
+      <div class="list-group list-group-flush chat-lista">
+        <% if (conversaciones.length === 0) { %>
+          <div class="empty-state py-3"><small>No hay conversaciones</small></div>
+        <% } %>
+        <% conversaciones.forEach(c => { %>
+          <a href="/mensajes/con/<%= c.id %>" class="list-group-item list-group-item-action <%= activeId === c.id ? 'active' : '' %>">
+            <div class="d-flex justify-content-between">
+              <strong><%= c.nombre %></strong>
+              <% if (c.no_leidos > 0 && activeId !== c.id) { %><span class="badge bg-danger"><%= c.no_leidos %></span><% } %>
+            </div>
+            <div class="small text-truncate <%= activeId === c.id ? 'text-white-50' : 'text-muted' %>">
+              <% if (c.rol === 'admin') { %><i class="bi bi-shield"></i>
+              <% } else if (c.rol === 'profesor') { %><i class="bi bi-mortarboard"></i>
+              <% } else if (c.rol === 'soporte') { %><i class="bi bi-headset"></i><% } %>
+              <%= c.ultimo ? c.ultimo.substring(0, 50) : 'Iniciá una conversación' %>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <% if (typeof otro !== 'undefined' && otro) { %>
+      <div class="card">
+        <div class="card-header bg-white"><strong><%= otro.nombre %></strong>
+          <% if (otro.rol === 'admin') { %><span class="badge badge-rol-admin ms-1">Admin</span>
+          <% } else if (otro.rol === 'profesor') { %><span class="badge badge-rol-profesor ms-1">Profesor</span>
+          <% } else if (otro.rol === 'soporte') { %><span class="badge badge-rol-soporte ms-1">Soporte</span><% } %>
+        </div>
+        <div class="card-body chat-window" id="chat">
+          <% if (mensajes.length === 0) { %>
+            <div class="text-center text-muted small">Sin mensajes aún.</div>
+          <% } %>
+          <% mensajes.forEach(m => { %>
+            <div class="mensaje-burbuja <%= m.remitente_id === currentUser.id ? 'mensaje-mio' : 'mensaje-otro' %>">
+              <%- helpers.nl2br(m.contenido) %>
+              <div class="small <%= m.remitente_id === currentUser.id ? 'text-white-50' : 'text-muted' %>" style="font-size:.7rem;"><%= helpers.formatDate(m.fecha) %></div>
+            </div>
+            <div class="clearfix"></div>
+          <% }) %>
+        </div>
+        <form action="/mensajes/con/<%= otro.id %>" method="POST" class="card-footer bg-white">
+          <div class="input-group">
+            <input type="text" name="contenido" class="form-control" placeholder="Escribí un mensaje..." required autofocus>
+            <button class="btn btn-primary"><i class="bi bi-send"></i></button>
+          </div>
+        </form>
+      </div>
+      <script>const c=document.getElementById('chat'); if(c) c.scrollTop=c.scrollHeight;</script>
+    <% } else { %>
+      <div class="card"><div class="empty-state"><i class="bi bi-chat-dots"></i><p>Seleccioná una conversación o iniciá una nueva.</p></div></div>
+    <% } %>
+  </div>
+</div>

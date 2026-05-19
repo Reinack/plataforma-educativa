@@ -1,0 +1,200 @@
+<div class="mb-4">
+  <h2 class="mb-1"><i class="bi bi-book"></i> Manual de uso</h2>
+  <p class="text-muted mb-0">Guía rápida para sacarle el jugo a la plataforma.</p>
+</div>
+
+<div class="row g-4">
+  <!-- Índice -->
+  <div class="col-lg-3">
+    <div class="card position-sticky" style="top: 1rem;">
+      <div class="card-header bg-white"><strong><i class="bi bi-list-ul"></i> Índice</strong></div>
+      <div class="list-group list-group-flush">
+        <a href="#bienvenida" class="list-group-item list-group-item-action">Bienvenida</a>
+        <a href="#cuenta" class="list-group-item list-group-item-action">Tu cuenta</a>
+        <a href="#cursos" class="list-group-item list-group-item-action">Cursos y lecciones</a>
+        <a href="#clases" class="list-group-item list-group-item-action">Clases en vivo</a>
+        <a href="#material" class="list-group-item list-group-item-action">Material descargable</a>
+        <a href="#comunidad" class="list-group-item list-group-item-action">Comunidad</a>
+        <a href="#mensajes" class="list-group-item list-group-item-action">Mensajes</a>
+        <a href="#notificaciones" class="list-group-item list-group-item-action">Notificaciones</a>
+        <% if (rol === 'profesor') { %>
+          <a href="#profesor" class="list-group-item list-group-item-action"><i class="bi bi-mortarboard"></i> Para profesores</a>
+        <% } %>
+        <% if (rol === 'admin') { %>
+          <a href="#admin" class="list-group-item list-group-item-action"><i class="bi bi-shield-lock"></i> Para administradores</a>
+        <% } %>
+        <a href="#faq" class="list-group-item list-group-item-action">Preguntas frecuentes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="col-lg-9">
+
+    <section id="bienvenida" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-stars"></i> Bienvenido</h4>
+        <p class="mb-2">Estás dentro de <strong>Hache Producciones</strong>, la plataforma educativa donde vas a poder:</p>
+        <ul class="mb-0">
+          <li>Ver los cursos que te asignaron y avanzar a tu ritmo.</li>
+          <li>Sumarte a clases en vivo desde el calendario.</li>
+          <li>Descargar material complementario (PDFs, planillas, presentaciones).</li>
+          <li>Participar en la comunidad de tus cursos y escribirte con compañeros o staff.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="cuenta" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-person-circle"></i> Tu cuenta</h4>
+        <ul class="mb-0">
+          <li>El <strong>usuario</strong> con el que iniciás sesión te lo asigna el administrador. No se puede cambiar.</li>
+          <li>Tu <strong>contraseña</strong>, <strong>nombre</strong>, <strong>bio</strong> y <strong>foto</strong> los podés modificar en <a href="/perfil">Mi perfil</a>.</li>
+          <li>La foto que subas también aparece en el panel del administrador.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="cursos" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-collection-play"></i> Cursos y lecciones</h4>
+        <ul>
+          <li>Vas a ver únicamente los cursos a los que estás asignado.</li>
+          <li>Cada curso se organiza en <strong>módulos</strong> y dentro de cada módulo hay <strong>lecciones</strong> en video.</li>
+          <li>Una lección se marca como completada automáticamente cuando la mirás. Tu progreso queda guardado.</li>
+          <li>El porcentaje de avance aparece en la tarjeta del curso y en el dashboard.</li>
+        </ul>
+        <p class="small text-muted mb-0">Tip: usá los videos a velocidad x1.25 si los seguís bien — el reproductor lo permite desde su menú.</p>
+      </div>
+    </section>
+
+    <section id="clases" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-camera-video"></i> Clases en vivo</h4>
+        <ul>
+          <li>En <a href="/clases">Clases en vivo</a> tenés un listado y un <strong>calendario</strong> con todas las clases visibles para vos.</li>
+          <li>Las clases pueden ser <strong>generales</strong> (visibles a todos) o pertenecer a un curso específico (solo las ven los alumnos del curso).</li>
+          <li>Al entrar a una clase vas a ver el <strong>link de Zoom / Meet</strong> y los datos del instructor.</li>
+          <li>Cuando se crea una clase nueva, te llega una notificación.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="material" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-folder"></i> Material descargable</h4>
+        <ul>
+          <li>Acá vas a encontrar PDFs, planillas, presentaciones, imágenes, audios o videos para descargar.</li>
+          <li>Podés <strong>filtrar por tipo de archivo</strong> usando los chips de la parte superior.</li>
+          <li>Podés <strong>buscar</strong> por título, descripción o nombre de archivo y <strong>filtrar por curso</strong>.</li>
+          <li>Hacé clic en <i class="bi bi-download"></i> Descargar para guardar el archivo en tu dispositivo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="comunidad" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-chat-square-text"></i> Comunidad</h4>
+        <ul>
+          <li>La comunidad se divide en una sección <strong>General</strong> (visible a todos) y una comunidad <strong>por curso</strong>.</li>
+          <li>Solo ves las comunidades de los cursos a los que estás asignado.</li>
+          <li>Al crear un post elegís en qué comunidad publicar (General o uno de tus cursos).</li>
+          <li>Podés dar <i class="bi bi-heart"></i> like y dejar comentarios. Si comentan en tu post, te llega una notificación.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="mensajes" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-envelope"></i> Mensajes</h4>
+        <ul class="mb-0">
+          <li>Mensajería directa con cualquier otro usuario de la plataforma.</li>
+          <li>El número rojo al lado de "Mensajes" indica cuántos no leídos tenés.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="notificaciones" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-bell"></i> Notificaciones</h4>
+        <ul class="mb-0">
+          <li>Te avisan cuando: te asignan un curso, hay una clase nueva, alguien comenta en tu post, te llega un mensaje.</li>
+          <li>El número rojo del menú muestra las no leídas. Al abrir el listado se marcan como vistas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <% if (rol === 'profesor') { %>
+      <section id="profesor" class="card mb-3 border-primary">
+        <div class="card-body">
+          <h4><i class="bi bi-mortarboard"></i> Para profesores</h4>
+          <ul class="mb-0">
+            <li>El administrador te asigna como <strong>instructor</strong> de una clase en vivo. Esa clase aparece automáticamente en tu listado y calendario de <a href="/clases">Clases en vivo</a>.</li>
+            <li>Cuando te asignan una clase, te llega una notificación con el link directo al detalle.</li>
+            <li>Podés participar en las comunidades de los cursos donde tenés clases o aportar en la comunidad General.</li>
+          </ul>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (rol === 'admin') { %>
+      <section id="admin" class="card mb-3 border-danger">
+        <div class="card-body">
+          <h4><i class="bi bi-shield-lock"></i> Para administradores</h4>
+          <ol class="mb-0">
+            <li><strong>Usuarios</strong> (<a href="/admin/usuarios">/admin/usuarios</a>): crear, editar, dar de baja. Filtrá por rol con las tarjetas de arriba. La foto de perfil del usuario también se muestra acá.</li>
+            <li><strong>Categorías</strong> (<a href="/admin/categorias">/admin/categorias</a>): organizá los cursos por temática.</li>
+            <li><strong>Cursos</strong> (<a href="/admin/cursos">/admin/cursos</a>): crear el curso, sumar módulos, cargar videos (link de YouTube/Vimeo o archivo) y <strong>asignar alumnos</strong>. Al asignar un alumno le llega una notificación.</li>
+            <li><strong>Clases en vivo</strong> (<a href="/admin/clases">/admin/clases</a>): el campo "Instructor" es un dropdown con todos los usuarios <em>profesor</em>. Al guardar, el profe queda agendado y se le notifica.</li>
+            <li><strong>Material descargable</strong> (<a href="/admin/material">/admin/material</a>): subir, editar (incluso reemplazar el archivo) y eliminar. Filtros por tipo, búsqueda y curso.</li>
+            <li><strong>Comunidad</strong> (<a href="/admin/comunidad">/admin/comunidad</a>): moderación. Buscá por texto, filtrá por comunidad o por fijados. Podés fijar / desfijar y borrar posts.</li>
+            <li><strong>Estadísticas</strong> (<a href="/admin/estadisticas">/admin/estadisticas</a>): cursos más populares y alumnos más activos.</li>
+          </ol>
+        </div>
+      </section>
+    <% } %>
+
+    <section id="faq" class="card mb-3">
+      <div class="card-body">
+        <h4><i class="bi bi-patch-question"></i> Preguntas frecuentes</h4>
+        <div class="accordion" id="faqAcc">
+          <div class="accordion-item">
+            <h6 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">No veo el curso que me corresponde</button></h6>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+              <div class="accordion-body">Avisale al administrador para que te asigne. Solo ves los cursos que tenés asignados.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h6 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">Olvidé mi contraseña</button></h6>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+              <div class="accordion-body">Hablá con el administrador. Desde el panel de usuarios puede resetearte la contraseña.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h6 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">¿Cómo subo una foto de perfil?</button></h6>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+              <div class="accordion-body">Andá a <a href="/perfil">Mi perfil</a>, sumá la imagen en "Foto de perfil" y guardá. Se actualiza inmediatamente en toda la plataforma.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h6 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">El link de la clase en vivo no funciona</button></h6>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+              <div class="accordion-body">Asegurate de tener instalado Zoom o Meet en tu dispositivo. Si el link sigue fallando, mandale un mensaje al administrador.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h6 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">¿Puedo postear en cualquier comunidad?</button></h6>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+              <div class="accordion-body">Sí, en la comunidad <em>General</em> y en la de cualquier curso al que estés asignado.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center text-muted small mt-4 mb-3">
+      ¿Algo no quedó claro? Escribile al equipo desde <a href="/mensajes/nuevo">Mensajes</a>.
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg sticky-top">
+  <a class="navbar-brand" href="/">
+    <i class="bi bi-mortarboard-fill"></i> Hache Producciones
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topbar">
+    <i class="bi bi-list" style="font-size:1.4rem;"></i>
+  </button>
+  <div class="collapse navbar-collapse" id="topbar">
+    <ul class="navbar-nav ms-auto align-items-lg-center">
+      <% if (currentUser) { %>
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="/notificaciones" title="Notificaciones">
+            <i class="bi bi-bell fs-5"></i>
+            <% if (notifCount > 0) { %><span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small"><%= notifCount %></span><% } %>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="/mensajes" title="Mensajes">
+            <i class="bi bi-envelope fs-5"></i>
+            <% if (mensajesCount > 0) { %><span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small"><%= mensajesCount %></span><% } %>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+            <% if (currentUser.avatar) { %>
+              <img src="<%= currentUser.avatar %>" alt="Avatar" class="avatar-circle me-2" style="object-fit: cover; border: none; width: 36px; height: 36px;">
+            <% } else { %>
+              <div class="avatar-circle me-2"><%= currentUser.nombre.charAt(0).toUpperCase() %></div>
+            <% } %>
+            <span><%= currentUser.nombre %></span>
+            <% if (currentUser.rol === 'admin') { %><span class="badge bg-warning text-dark ms-2">Admin</span>
+            <% } else if (currentUser.rol === 'soporte') { %><span class="badge badge-rol-soporte ms-2">Soporte</span>
+            <% } else if (currentUser.rol === 'profesor') { %><span class="badge badge-rol-profesor ms-2">Profesor</span><% } %>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/perfil"><i class="bi bi-person"></i> Mi perfil</a></li>
+            <% if (currentUser.rol === 'admin') { %>
+              <li><a class="dropdown-item" href="/admin"><i class="bi bi-shield-lock"></i> Panel admin</a></li>
+            <% } %>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form action="/logout" method="POST" class="d-inline">
+                <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      <% } else { %>
+        <li class="nav-item"><a class="nav-link" href="/login">Ingresar</a></li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

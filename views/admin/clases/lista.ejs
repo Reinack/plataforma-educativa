@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-between mb-3">
+  <h2><i class="bi bi-camera-video"></i> Clases en vivo</h2>
+  <a href="/admin/clases/nueva" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva clase</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light"><tr><th>Título</th><th>Fecha</th><th>Instructor</th><th>Curso</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        <% clases.forEach(c => { %>
+          <tr>
+            <td><strong><%= c.titulo %></strong></td>
+            <td class="small"><%= helpers.formatDate(c.fecha_hora) %></td>
+            <td><%= c.instructor || '—' %></td>
+            <td><% if (c.curso_titulo) { %><span class="badge bg-secondary"><%= c.curso_titulo %></span><% } else { %>—<% } %></td>
+            <td><span class="badge bg-<%= c.publicado ? 'success' : 'secondary' %>"><%= c.publicado ? 'Publicada' : 'Oculta' %></span></td>
+            <td class="tabla-acciones">
+              <a href="/admin/clases/<%= c.id %>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+              <form action="/admin/clases/<%= c.id %>/eliminar" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+
+<h5 class="mt-5 mb-3 border-top pt-4">Calendario de Clases</h5>
+<div id="calendar" class="mb-5"></div>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js' defer></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/es.js' defer></script>
+<style>
+  #calendar {
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    min-height: 640px;
+    opacity: 0;
+    transition: opacity .15s ease;
+  }
+  #calendar.fc-ready { opacity: 1; }
+  .fc-theme-standard td, .fc-theme-standard th, .fc-theme-standard .fc-scrollgrid {
+    border-color: var(--border) !important;
+  }
+  .fc-col-header-cell {
+    background: var(--bg-elev-1);
+  }
+  .fc-event { cursor: pointer; border: none; }
+  .fc .fc-button-primary { background-color: var(--primary); border-color: var(--primary); }
+  .fc .fc-button-primary:hover { background-color: var(--primary-700); border-color: var(--primary-700); }
+  .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active { background-color: var(--primary-700); border-color: var(--primary-700); }
+  .fc-daygrid-day-number { color: var(--text); text-decoration: none; font-weight: 500; }
+  .fc-col-header-cell-cushion { color: var(--text-muted); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
+  .fc-day-today { background-color: var(--bg-elev-2) !important; }
+  .fc-day-other .fc-daygrid-day-number { color: var(--text-soft); }
+</style>
+<script>
+  window.addEventListener('load', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var eventos = <%- JSON.stringify(clases.map(c => ({
+      title: c.titulo,
+      start: c.fecha_hora,
+      url: '/admin/clases/' + c.id,
+      color: new Date(c.fecha_hora) > new Date() ? '#4f46e5' : '#94a3b8'
+    }))) %>;
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      locale: 'es',
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,listWeek'
+      },
+      events: eventos,
+      eventClick: function(info) {
+        if (info.event.url) {
+          window.location.href = info.event.url;
+          info.jsEvent.preventDefault();
+        }
+      }
+    });
+
+    calendar.render();
+    calendarEl.classList.add('fc-ready');
+  });
+</script>

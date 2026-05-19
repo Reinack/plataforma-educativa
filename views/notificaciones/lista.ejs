@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between mb-3">
+  <h2 class="mb-0"><i class="bi bi-bell"></i> Notificaciones</h2>
+  <% if (notifs.length > 0) { %>
+    <form action="/notificaciones/limpiar" method="POST" onsubmit="return confirm('¿Borrar todas?')">
+      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Limpiar todas</button>
+    </form>
+  <% } %>
+</div>
+
+<% if (notifs.length === 0) { %>
+  <div class="empty-state"><i class="bi bi-bell-slash"></i><p>No tenés notificaciones.</p></div>
+<% } else { %>
+  <div class="list-group">
+    <% notifs.forEach(n => { %>
+      <a href="<%= n.link || '#' %>" class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+          <div>
+            <i class="bi bi-<%= n.tipo === 'mensaje' ? 'envelope' : n.tipo === 'certificado' ? 'award' : n.tipo === 'comentario' ? 'chat' : 'bell' %>"></i>
+            <%= n.mensaje %>
+          </div>
+          <small class="text-muted"><%= helpers.formatDate(n.fecha) %></small>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<% } %>
