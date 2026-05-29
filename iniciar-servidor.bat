@@ -1,9 +1,9 @@
 @echo off
-title Hache Producciones
+title AulaViva
 cd /d "%~dp0"
 
 echo ============================================================
-echo            HACHE PRODUCCIONES - Iniciando...
+echo            AULAVIVA - Iniciando...
 echo ============================================================
 echo.
 
