@@ -4,7 +4,7 @@
 
 **Deploy**: Render + Neon PostgreSQL (zero-config self-hosted schema on first run)
 
----
+[---](https://plataforma-educativa-1-u6tk.onrender.com)
 
 ## Features
 
