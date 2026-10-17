@@ -1,0 +1,39 @@
+<h2><i class="bi bi-<%= material ? 'pencil' : 'upload' %>"></i> <%= material ? 'Editar material' : 'Subir material' %></h2>
+<form action="<%= material ? '/admin/material/' + material.id + '/editar' : '/admin/material/nuevo' %>" method="POST" enctype="multipart/form-data" class="card card-body">
+  <% if (material) { %>
+    <div class="alert alert-light border d-flex align-items-center gap-2 py-2">
+      <i class="bi bi-file-earmark"></i>
+      <div class="small">
+        Archivo actual: <code><%= material.archivo_nombre %></code> · <%= helpers.formatBytes(material.tamano_bytes) %>
+      </div>
+    </div>
+  <% } %>
+  <div class="mb-3">
+    <label class="form-label">Título</label>
+    <input name="titulo" class="form-control" value="<%= material ? material.titulo : '' %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Descripción</label>
+    <textarea name="descripcion" rows="2" class="form-control"><%= material ? (material.descripcion || '') : '' %></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Curso (opcional)</label>
+    <select name="curso_id" class="form-select">
+      <option value="">— general —</option>
+      <% cursos.forEach(c => { %>
+        <option value="<%= c.id %>" <%= material && material.curso_id == c.id ? 'selected' : '' %>><%= c.titulo %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">
+      Archivo <% if (material) { %><small class="text-muted">(opcional, dejar vacío para no cambiarlo)</small><% } %>
+      <span class="text-muted">· máx 100 MB</span>
+    </label>
+    <input type="file" name="archivo" class="form-control" <%= material ? '' : 'required' %>>
+  </div>
+  <div>
+    <a href="/admin/material" class="btn btn-light">Volver</a>
+    <button class="btn btn-primary"><%= material ? 'Guardar cambios' : 'Subir' %></button>
+  </div>
+</form>

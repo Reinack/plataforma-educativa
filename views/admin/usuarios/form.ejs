@@ -1,0 +1,51 @@
+<h2><i class="bi bi-person<%= user ? '-gear' : '-plus' %>"></i> <%= user ? 'Editar' : 'Nuevo' %> usuario</h2>
+<form action="/admin/usuarios/<%= user ? user.id : 'nuevo' %>" method="POST" class="card card-body">
+  <% if (user) { %>
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <% if (user.avatar) { %>
+        <img src="<%= user.avatar %>" alt="Avatar" class="avatar-circle lg" style="object-fit: cover;">
+      <% } else { %>
+        <div class="avatar-circle lg avatar-rol-<%= user.rol %>"><%= user.nombre.charAt(0).toUpperCase() %></div>
+      <% } %>
+      <div>
+        <div class="small text-muted">Foto de perfil</div>
+        <div class="small"><%= user.avatar ? 'Subida por el usuario desde su perfil.' : 'El usuario aún no subió una foto.' %></div>
+      </div>
+    </div>
+  <% } %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Nombre completo</label>
+      <input name="nombre" class="form-control" value="<%= user ? user.nombre : '' %>" required>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Usuario (para iniciar sesión)</label>
+      <input name="username" class="form-control" value="<%= user ? user.username : '' %>" required minlength="3" maxlength="30" pattern="[a-zA-Z0-9._\-]+" autocomplete="off">
+      <small class="text-muted">3-30 caracteres: letras, números, punto, guion o guion bajo.</small>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Contraseña <% if (user) { %><small class="text-muted">(dejar vacío para no cambiar)</small><% } %></label>
+      <input type="password" name="password" class="form-control" <%= user ? '' : 'required' %> autocomplete="new-password">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Rol</label>
+      <select name="rol" class="form-select">
+        <option value="alumno" <%= user && user.rol === 'alumno' ? 'selected' : '' %>>Alumno</option>
+        <option value="profesor" <%= user && user.rol === 'profesor' ? 'selected' : '' %>>Profesor</option>
+        <option value="soporte" <%= user && user.rol === 'soporte' ? 'selected' : '' %>>Equipo de Soporte</option>
+        <option value="admin" <%= user && user.rol === 'admin' ? 'selected' : '' %>>Administrador</option>
+      </select>
+    </div>
+    <% if (user) { %>
+      <div class="col-md-2 mb-3 d-flex align-items-end">
+        <div class="form-check">
+          <input type="checkbox" name="activo" class="form-check-input" id="activo" <%= user.activo ? 'checked' : '' %>>
+          <label for="activo" class="form-check-label">Activo</label>
+        </div>
+      </div>
+    <% } %>
+  </div>
+  <div><a href="/admin/usuarios" class="btn btn-light">Volver</a> <button class="btn btn-primary">Guardar</button></div>
+</form>

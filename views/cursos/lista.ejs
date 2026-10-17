@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0"><i class="bi bi-collection-play"></i> <%= currentUser.rol === 'alumno' ? 'Mis cursos' : 'Cursos' %></h2>
+</div>
+
+<form class="row g-2 mb-4" method="GET">
+  <div class="col-md-6"><input type="text" name="q" value="<%= q || '' %>" class="form-control" placeholder="Buscar cursos..."></div>
+  <div class="col-md-4">
+    <select name="categoria" class="form-select">
+      <option value="">Todas las categorías</option>
+      <% categorias.forEach(c => { %>
+        <option value="<%= c.id %>" <%= filtroCategoria == c.id ? 'selected' : '' %>><%= c.nombre %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Filtrar</button></div>
+</form>
+
+<% if (cursos.length === 0) { %>
+  <div class="empty-state">
+    <i class="bi bi-collection-play"></i>
+    <% if (currentUser.rol === 'alumno') { %>
+      <p>Todavía no tenés cursos asignados.<br><small class="text-muted">El administrador te asignará cursos cuando estén listos.</small></p>
+    <% } else { %>
+      <p>No hay cursos con esos filtros.</p>
+    <% } %>
+  </div>
+<% } else { %>
+  <div class="row g-3">
+    <% cursos.forEach(c => { %>
+      <div class="col-lg-4 col-md-6">
+        <a href="/cursos/<%= c.id %>" class="text-decoration-none text-reset">
+          <div class="card card-hover h-100">
+            <div class="curso-thumb"><i class="bi bi-play-circle"></i></div>
+            <div class="card-body">
+              <small class="text-muted"><%= c.categoria || 'Sin categoría' %></small>
+              <h5 class="mt-1"><%= c.titulo %></h5>
+              <p class="small text-muted mb-2"><%= c.descripcion ? c.descripcion.substring(0, 100) : '' %><%= c.descripcion && c.descripcion.length > 100 ? '...' : '' %></p>
+              <div class="d-flex justify-content-between small text-muted">
+                <span><i class="bi bi-person"></i> <%= c.instructor || '—' %></span>
+                <span><i class="bi bi-play-btn"></i> <%= c.total_lecciones %> videos</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>

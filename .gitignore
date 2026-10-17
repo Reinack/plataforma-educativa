@@ -1,0 +1,12 @@
+node_modules/
+data/
+uploads/
+.env
+*.log
+.DS_Store
+.claude/
+
+# Archivos de agentes de IA (locales, no se publican)
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md

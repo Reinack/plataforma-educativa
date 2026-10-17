@@ -1,0 +1,26 @@
+<h2><i class="bi bi-tags"></i> Categorías</h2>
+<div class="row mt-3">
+  <div class="col-md-5">
+    <div class="card card-body">
+      <form action="/admin/categorias/nueva" method="POST" class="d-flex gap-2">
+        <input name="nombre" class="form-control" placeholder="Nueva categoría" required>
+        <button class="btn btn-primary">Agregar</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        <% if (cats.length === 0) { %><li class="list-group-item text-muted small">Sin categorías</li><% } %>
+        <% cats.forEach(c => { %>
+          <li class="list-group-item d-flex justify-content-between">
+            <span><i class="bi bi-tag"></i> <%= c.nombre %> <small class="text-muted">(<%= c.num_cursos %> cursos)</small></span>
+            <form action="/admin/categorias/<%= c.id %>/eliminar" method="POST" onsubmit="return confirm('¿Eliminar?')">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</div>

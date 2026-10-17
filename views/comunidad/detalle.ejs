@@ -1,0 +1,49 @@
+<nav aria-label="breadcrumb" class="small">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/comunidad">Comunidad</a></li>
+    <% if (post.curso_titulo) { %>
+      <li class="breadcrumb-item"><a href="/comunidad?curso_id=<%= post.curso_id %>"><%= post.curso_titulo %></a></li>
+    <% } else { %>
+      <li class="breadcrumb-item"><a href="/comunidad?curso_id=general">General</a></li>
+    <% } %>
+    <li class="breadcrumb-item active"><%= post.titulo %></li>
+  </ol>
+</nav>
+
+<div class="card post-card mb-3 <%= post.fijado ? 'fijado' : '' %>">
+  <div class="card-body">
+    <% if (post.fijado) { %><span class="badge bg-warning text-dark me-1"><i class="bi bi-pin-angle"></i> Fijado</span><% } %>
+    <% if (post.curso_titulo) { %>
+      <span class="badge bg-secondary"><i class="bi bi-collection-play"></i> <%= post.curso_titulo %></span>
+    <% } else { %>
+      <span class="badge bg-info text-dark"><i class="bi bi-globe"></i> General</span>
+    <% } %>
+    <h3 class="mt-2"><%= post.titulo %></h3>
+    <div class="small text-muted mb-3"><i class="bi bi-person-circle"></i> <%= post.autor %> · <%= helpers.formatDate(post.fecha) %></div>
+    <div><%- helpers.nl2br(post.contenido) %></div>
+    <hr>
+    <form action="/comunidad/<%= post.id %>/like" method="POST" class="d-inline">
+      <button class="btn btn-sm <%= post.me_gusta ? 'btn-danger' : 'btn-outline-danger' %>">
+        <i class="bi <%= post.me_gusta ? 'bi-heart-fill' : 'bi-heart' %>"></i> <%= post.num_likes %>
+      </button>
+    </form>
+  </div>
+</div>
+
+<h5 class="mt-4">Comentarios (<%= comentarios.length %>)</h5>
+<form action="/comunidad/<%= post.id %>/comentar" method="POST" class="card card-body mb-3">
+  <textarea name="contenido" rows="3" class="form-control mb-2" placeholder="Escribí un comentario..." required></textarea>
+  <button class="btn btn-primary btn-sm align-self-end">Comentar</button>
+</form>
+
+<% comentarios.forEach(c => { %>
+  <div class="card mb-2">
+    <div class="card-body py-2">
+      <div class="d-flex justify-content-between">
+        <strong><%= c.autor %></strong>
+        <small class="text-muted"><%= helpers.formatDate(c.fecha) %></small>
+      </div>
+      <div class="mt-1"><%- helpers.nl2br(c.contenido) %></div>
+    </div>
+  </div>
+<% }) %>

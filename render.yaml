@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: plataforma-educativa
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false        # Configurar manualmente en el dashboard de Render
+      - key: SESSION_SECRET
+        generateValue: true

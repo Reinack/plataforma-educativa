@@ -1,0 +1,21 @@
+<nav aria-label="breadcrumb" class="small"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/clases">Clases</a></li><li class="breadcrumb-item active"><%= clase.titulo %></li></ol></nav>
+
+<div class="card">
+  <div class="card-body">
+    <h3><%= clase.titulo %></h3>
+    <p class="text-muted"><%= clase.descripcion %></p>
+    <ul class="list-unstyled small">
+      <li><i class="bi bi-calendar"></i> <strong><%= helpers.formatDate(clase.fecha_hora) %></strong></li>
+      <li><i class="bi bi-clock"></i> Duración: <%= clase.duracion_min %> minutos</li>
+      <li><i class="bi bi-person"></i> Instructor: <%= clase.instructor || '—' %></li>
+      <% if (clase.curso_titulo) { %><li><i class="bi bi-collection-play"></i> Curso: <%= clase.curso_titulo %></li><% } %>
+    </ul>
+
+    <% if (clase.link) { %>
+      <a href="<%= clase.link %>" target="_blank" class="btn btn-primary btn-lg mt-2"><i class="bi bi-camera-video"></i> Unirme a la clase</a>
+      <p class="small text-muted mt-2">El enlace abre Zoom / Meet en una pestaña nueva.</p>
+    <% } else { %>
+      <div class="alert alert-warning">Aún no hay link disponible para esta clase.</div>
+    <% } %>
+  </div>
+</div>

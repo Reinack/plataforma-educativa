@@ -1,0 +1,172 @@
+<h2><i class="bi bi-collection-play"></i> <%= curso ? 'Editar' : 'Nuevo' %> curso</h2>
+
+<form action="/admin/cursos/<%= curso ? curso.id : 'nuevo' %>" method="POST" class="card card-body mb-3">
+  <div class="row">
+    <div class="col-md-8 mb-3"><label class="form-label">Título</label><input name="titulo" class="form-control" value="<%= curso ? curso.titulo : '' %>" required></div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Instructor (profesor)</label>
+      <select name="instructor" class="form-select">
+        <option value="">— sin asignar —</option>
+        <% profesores.forEach(p => { %>
+          <option value="<%= p.nombre %>" <%= curso && curso.instructor === p.nombre ? 'selected' : '' %>><%= p.nombre %></option>
+        <% }) %>
+      </select>
+      <% if (profesores.length === 0) { %>
+        <small class="text-muted">No hay profesores. <a href="/admin/usuarios/nuevo">Crear uno</a>.</small>
+      <% } %>
+    </div>
+  </div>
+  <div class="mb-3"><label class="form-label">Descripción</label><textarea name="descripcion" rows="3" class="form-control"><%= curso ? (curso.descripcion || '') : '' %></textarea></div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Categoría</label>
+      <select name="categoria_id" class="form-select">
+        <option value="">— sin categoría —</option>
+        <% cats.forEach(c => { %><option value="<%= c.id %>" <%= curso && curso.categoria_id == c.id ? 'selected' : '' %>><%= c.nombre %></option><% }) %>
+      </select>
+    </div>
+    <div class="col-md-6 mb-3 d-flex align-items-end">
+      <div class="form-check">
+        <input type="checkbox" name="publicado" class="form-check-input" id="pub" <%= curso && curso.publicado ? 'checked' : '' %>>
+        <label for="pub" class="form-check-label">Publicar (visible a alumnos asignados)</label>
+      </div>
+    </div>
+  </div>
+  <div><a href="/admin/cursos" class="btn btn-light">Volver</a> <button class="btn btn-primary">Guardar curso</button></div>
+</form>
+
+<% if (curso && typeof alumnos !== 'undefined') { %>
+  <div class="card mb-3">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <strong><i class="bi bi-people"></i> Alumnos asignados</strong>
+      <small class="text-muted">Tildá los alumnos que pueden ver este curso</small>
+    </div>
+    <form action="/admin/cursos/<%= curso.id %>/asignar" method="POST" class="card-body">
+      <% if (alumnos.length === 0) { %>
+        <p class="text-muted small mb-0">No hay alumnos creados. <a href="/admin/usuarios/nuevo">Crear uno</a>.</p>
+      <% } else { %>
+        <div class="row">
+          <% alumnos.forEach(a => { %>
+            <div class="col-md-4 col-sm-6">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input alumno-check" name="alumnos" value="<%= a.id %>" id="al_<%= a.id %>" <%= a.asignado ? 'checked' : '' %>>
+                <label for="al_<%= a.id %>" class="form-check-label"><%= a.nombre %> <small class="text-muted">@<%= a.username %></small></label>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <div class="mt-2">
+          <button type="button" class="btn btn-sm btn-link" onclick="document.querySelectorAll('.alumno-check').forEach(c=>c.checked=true)">Seleccionar todos</button>
+          <button type="button" class="btn btn-sm btn-link" onclick="document.querySelectorAll('.alumno-check').forEach(c=>c.checked=false)">Ninguno</button>
+        </div>
+        <button class="btn btn-primary mt-2"><i class="bi bi-check2"></i> Guardar asignación</button>
+      <% } %>
+    </form>
+  </div>
+
+  <h4 class="mt-4"><i class="bi bi-list-ol"></i> Módulos y videos</h4>
+  <% modulos.forEach(m => { %>
+    <div class="card mb-2">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div><strong><%= m.titulo %></strong> <small class="text-muted">(orden: <%= m.orden %>)</small></div>
+        <form action="/admin/modulos/<%= m.id %>/eliminar" method="POST" onsubmit="return confirm('¿Eliminar módulo y sus videos?')">
+          <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+        </form>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% m.videos.forEach(v => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <i class="bi bi-play-btn"></i> <strong><%= v.titulo %></strong>
+              <small class="text-muted">(<%= v.duracion_min %> min)</small>
+              <% if (v.video_path) { %><span class="badge bg-info ms-1">archivo</span>
+              <% } else if (v.video_url) { %><span class="badge bg-danger ms-1">YouTube</span><% } %>
+            </span>
+            <div>
+              <button type="button" class="btn btn-sm btn-link text-primary" data-bs-toggle="modal" data-bs-target="#modalEditVideo_<%= v.id %>" title="Editar video"><i class="bi bi-pencil"></i></button>
+              <form action="/admin/videos/<%= v.id %>/eliminar" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar video?')">
+                <button class="btn btn-sm btn-link text-danger"><i class="bi bi-trash"></i></button>
+              </form>
+            </div>
+
+          </li>
+        <% }) %>
+        <li class="list-group-item bg-light">
+          <form action="/admin/modulos/<%= m.id %>/videos" method="POST" enctype="multipart/form-data">
+            <div class="row g-2">
+              <div class="col-md-12"><input name="titulo" class="form-control form-control-sm" placeholder="Título del video" required></div>
+              <div class="col-md-12"><textarea name="descripcion" class="form-control form-control-sm" rows="2" placeholder="Descripción o texto adicional (opcional)"></textarea></div>
+              <div class="col-md-6">
+                <label class="form-label small mb-0">Opción A: Link de YouTube</label>
+                <input name="video_url" class="form-control form-control-sm" placeholder="https://youtube.com/watch?v=...">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small mb-0">Opción B: Subir archivo de video</label>
+                <input type="file" name="video_file" class="form-control form-control-sm" accept="video/*">
+              </div>
+              <div class="col-md-3"><input type="number" name="duracion_min" class="form-control form-control-sm" placeholder="duración (min)" value="0"></div>
+              <div class="col-md-2"><input type="number" name="orden" class="form-control form-control-sm" placeholder="orden" value="0"></div>
+              <div class="col-md-7 d-grid"><button class="btn btn-success btn-sm"><i class="bi bi-plus-lg"></i> Agregar video</button></div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </div>
+  <% }) %>
+
+  <div class="card card-body bg-light">
+    <form action="/admin/cursos/<%= curso.id %>/modulos" method="POST" class="row g-2 align-items-end">
+      <div class="col-md-8"><label class="form-label small mb-0">Nuevo módulo</label><input name="titulo" class="form-control" placeholder="Título del módulo" required></div>
+      <div class="col-md-2"><label class="form-label small mb-0">Orden</label><input type="number" name="orden" class="form-control" value="0"></div>
+      <div class="col-md-2"><button class="btn btn-primary w-100"><i class="bi bi-plus-lg"></i> Crear módulo</button></div>
+    </form>
+  </div>
+<% } %>
+
+<!-- Modales de Edición de Videos -->
+<% if (typeof modulos !== 'undefined') { %>
+  <% modulos.forEach(m => { %>
+    <% m.videos.forEach(v => { %>
+      <div class="modal fade video-edit-modal" id="modalEditVideo_<%= v.id %>" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content text-dark">
+            <form action="/admin/videos/<%= v.id %>/editar" method="POST">
+              <div class="modal-header">
+                <h5 class="modal-title fs-5">Editar Video</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body text-start">
+                <div class="mb-3">
+                  <label class="form-label small">Título</label>
+                  <input name="titulo" class="form-control" value="<%= v.titulo %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small">Link de YouTube</label>
+                  <input name="video_url" class="form-control" value="<%= v.video_url || '' %>" placeholder="https://youtube.com/watch?v=...">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small">Descripción</label>
+                  <textarea name="descripcion" class="form-control" rows="3"><%= v.descripcion || '' %></textarea>
+                </div>
+              </div>
+              <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  <% }) %>
+<% } %>
+
+<script>
+  // Mover modales al final del body para evitar problemas de z-index con el backdrop
+  document.addEventListener('DOMContentLoaded', function() {
+    const modals = document.querySelectorAll('.video-edit-modal');
+    modals.forEach(function(modal) {
+      document.body.appendChild(modal);
+    });
+  });
+</script>

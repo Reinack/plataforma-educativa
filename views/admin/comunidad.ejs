@@ -1,0 +1,131 @@
+<div class="mb-3">
+  <h2 class="mb-1"><i class="bi bi-chat-square-text"></i> Moderación de comunidad</h2>
+  <p class="text-muted mb-0">Buscá, filtrá y moderá las publicaciones de cada comunidad.</p>
+</div>
+
+<!-- Tarjetas-resumen / filtros rápidos -->
+<div class="row g-3 mb-3">
+  <div class="col-lg col-md-4 col-6">
+    <a href="/admin/comunidad" class="text-decoration-none">
+      <div class="card filtro-rol <%= !curso_id && fijado !== '1' ? 'filtro-rol-activo' : '' %>">
+        <div class="card-body py-3 d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small">Todos los posts</div>
+            <div class="fs-4 fw-bold text-light"><%= totalPosts %></div>
+          </div>
+          <i class="bi bi-chat-square-text fs-2 text-muted"></i>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg col-md-4 col-6">
+    <a href="/admin/comunidad?curso_id=general" class="text-decoration-none">
+      <div class="card filtro-rol <%= curso_id === 'general' ? 'filtro-rol-activo' : '' %>">
+        <div class="card-body py-3 d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small">General</div>
+            <div class="fs-4 fw-bold" style="color:#7dd3fc;"><%= totalGeneral %></div>
+          </div>
+          <i class="bi bi-globe fs-2" style="color:#7dd3fc; opacity:.5;"></i>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg col-md-4 col-6">
+    <a href="/admin/comunidad?fijado=1" class="text-decoration-none">
+      <div class="card filtro-rol <%= fijado === '1' ? 'filtro-rol-activo' : '' %>">
+        <div class="card-body py-3 d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small">Fijados</div>
+            <div class="fs-4 fw-bold" style="color:#fcd34d;"><%= totalFijados %></div>
+          </div>
+          <i class="bi bi-pin-angle-fill fs-2" style="color:#fcd34d; opacity:.5;"></i>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Buscador + filtro de curso -->
+<form class="card card-body mb-3 py-2" method="GET">
+  <% if (fijado === '1') { %><input type="hidden" name="fijado" value="1"><% } %>
+  <div class="row g-2 align-items-center">
+    <div class="col-md-6">
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
+        <input type="text" name="q" value="<%= q || '' %>" class="form-control border-start-0 ps-0" placeholder="Buscar por título, contenido o autor...">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <select name="curso_id" class="form-select">
+        <option value="">Todas las comunidades</option>
+        <option value="general" <%= curso_id === 'general' ? 'selected' : '' %>>— General —</option>
+        <% cursos.forEach(c => { %>
+          <option value="<%= c.id %>" <%= String(curso_id) === String(c.id) ? 'selected' : '' %>>
+            <%= c.titulo %> (<%= c.num_posts %>)
+          </option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="col-md-2 d-grid"><button class="btn btn-primary"><i class="bi bi-funnel"></i> Filtrar</button></div>
+  </div>
+</form>
+
+<% if (posts.length === 0) { %>
+  <div class="empty-state">
+    <i class="bi bi-search"></i>
+    <p>No hay posts con esos filtros.</p>
+    <% if (q || curso_id || fijado) { %><a href="/admin/comunidad" class="btn btn-light btn-sm">Limpiar filtros</a><% } %>
+  </div>
+<% } else { %>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Título</th>
+            <th>Comunidad</th>
+            <th>Autor</th>
+            <th class="text-center" title="Comentarios"><i class="bi bi-chat"></i></th>
+            <th class="text-center" title="Likes"><i class="bi bi-heart"></i></th>
+            <th>Fecha</th>
+            <th class="tabla-acciones text-end pe-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% posts.forEach(p => { %>
+            <tr class="<%= p.fijado ? 'table-warning' : '' %>">
+              <td>
+                <% if (p.fijado) { %><i class="bi bi-pin-angle-fill text-warning"></i> <% } %>
+                <a href="/comunidad/<%= p.id %>" class="text-decoration-none text-reset"><strong><%= p.titulo %></strong></a>
+                <div class="small text-muted"><%= p.contenido.length > 90 ? p.contenido.substring(0, 90) + '…' : p.contenido %></div>
+              </td>
+              <td>
+                <% if (p.curso_titulo) { %>
+                  <span class="badge bg-secondary"><i class="bi bi-collection-play"></i> <%= p.curso_titulo %></span>
+                <% } else { %>
+                  <span class="badge bg-info text-dark"><i class="bi bi-globe"></i> General</span>
+                <% } %>
+              </td>
+              <td><%= p.autor %></td>
+              <td class="text-center"><%= p.num_com %></td>
+              <td class="text-center"><%= p.num_likes %></td>
+              <td class="small"><%= helpers.formatDateShort(p.fecha) %></td>
+              <td class="tabla-acciones text-end pe-3">
+                <form action="/admin/comunidad/<%= p.id %>/fijar" method="POST" class="d-inline">
+                  <button class="btn btn-sm <%= p.fijado ? 'btn-warning' : 'btn-outline-warning' %>" title="<%= p.fijado ? 'Desfijar' : 'Fijar' %>"><i class="bi bi-pin<%= p.fijado ? '-angle-fill' : '' %>"></i></button>
+                </form>
+                <form action="/admin/comunidad/<%= p.id %>/eliminar" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar post?')">
+                  <button class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer text-muted small">
+      <strong><%= posts.length %></strong> post<%= posts.length === 1 ? '' : 's' %><% if (q || curso_id || fijado) { %> · <a href="/admin/comunidad">Limpiar filtros</a><% } %>
+    </div>
+  </div>
+<% } %>
